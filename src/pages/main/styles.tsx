@@ -6,12 +6,4 @@ export const Main = styled.div`
   justify-content: flex-start;
   align-items: center;
   height: 100%;
-  color: white;
-  text-align: center;
-  background-color: #282c34;
-  svg {
-    width: 300px;
-    height: 300px;
-    pointer-events: none;
-  }
 `
