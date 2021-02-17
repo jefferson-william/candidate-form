@@ -1,11 +1,11 @@
 import React from 'react'
+import Layout from '~/components/Layout'
 import { Main } from '~/pages/main/styles'
 
 const Component: React.FC = () => (
-  <Main className="main">
-    <header className="main-header" />
-    <main />
-  </Main>
+  <Layout>
+    <Main />
+  </Layout>
 )
 
 export default Component

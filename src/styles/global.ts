@@ -23,7 +23,8 @@ export default createGlobalStyle`
     margin: 0;
   }
   body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    background-color: #eee;
   }
   #root {
     display: flex;
