@@ -1,5 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+// eslint-disable-next-line
+import { LinkedIn } from 'react-linkedin-login-oauth2'
+import linkedinImage from 'react-linkedin-login-oauth2/assets/linkedin.png'
 import { Button, Card, FormControl, Input, InputLabel, Tab, Tabs } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
 import AddInformationFields from '~/components/AddInformationFields'
@@ -45,6 +48,10 @@ const Component: React.FC = () => {
     [lastPanel, panelIndex, data]
   )
 
+  const handleLinkedinSuccess = useCallback(() => {}, [])
+
+  const handleLinkedinFailure = useCallback(() => {}, [])
+
   return (
     <Layout>
       <Main maxWidth="sm">
@@ -53,6 +60,14 @@ const Component: React.FC = () => {
           <Tab label="Onde já trabalhou" {...a11yProps(1)} />
           <Tab label="Conhecimentos" {...a11yProps(2)} />
         </Tabs>
+        <LinkedIn
+          clientId={process.env.REACT_APP_LINKEDIN_CLIENT_ID}
+          onFailure={handleLinkedinSuccess}
+          onSuccess={handleLinkedinFailure}
+          redirectUri="https://candidate-form.herokuapp.com"
+        >
+          <img src={linkedinImage} alt="Log in with Linked In" style={{ maxWidth: '180px' }} />
+        </LinkedIn>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TabPanel className="main__tab-panel" value={panelIndex} index={0} dir={theme.direction}>
             <Card className="main__card">

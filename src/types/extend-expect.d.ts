@@ -4,3 +4,5 @@ declare namespace jest {
     toHaveStyleRule: import('jest-styled-components').jest.Matchers<R>['toHaveStyleRule']
   }
 }
+
+declare module 'react-linkedin-login-oauth2'
