@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Button, Card, FormControl, IconButton, Input, InputAdornment, InputLabel, Tab, Tabs } from '@material-ui/core'
+import { Button, Card, FormControl, Input, InputLabel, Tab, Tabs } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
-import { Add, Close } from '@material-ui/icons'
+import AddInformationFields from '~/components/AddInformationFields'
 import Layout from '~/components/Layout'
 import TabPanel from '~/components/TabPanel'
 import { Main } from '~/pages/main/styles'
@@ -31,17 +31,6 @@ const Component: React.FC = () => {
 
   const handleBack = useCallback(() => setPanelIndex(panelIndex - 1), [panelIndex])
 
-  const handleAddNumberOfFieldsWhereYouWorked = useCallback(
-    () => setWhereDidYouWorkList([...whereDidYouWorkList, whereDidYouWorkList.length]),
-    [whereDidYouWorkList]
-  )
-
-  const handleRemoveNumberOfFieldsWhereYouWorked = useCallback(() => {
-    whereDidYouWorkList.pop()
-
-    setWhereDidYouWorkList([...whereDidYouWorkList])
-  }, [whereDidYouWorkList])
-
   const onSubmit = useCallback(
     (values: Partial<DataProps>) => {
       const canMoveForward = !lastPanel
@@ -58,7 +47,7 @@ const Component: React.FC = () => {
   return (
     <Layout>
       <Main maxWidth="sm">
-        <Tabs className="main__tabs" value={panelIndex} onChange={handleChange} aria-label="simple tabs example">
+        <Tabs className="main__tabs" value={panelIndex} onChange={handleChange} aria-label="Perguntas">
           <Tab label="Dados básicos" {...a11yProps(0)} />
           <Tab label="Onde já trabalhou" {...a11yProps(1)} />
           <Tab label="Conhecimentos" {...a11yProps(2)} />
@@ -78,35 +67,14 @@ const Component: React.FC = () => {
           </TabPanel>
           <TabPanel className="main__tab-panel" value={panelIndex} index={1} dir={theme.direction}>
             <Card className="main__card">
-              {whereDidYouWorkList.map((index) => (
-                <FormControl key={index} className="main__form-control" required>
-                  <InputLabel htmlFor={`whereDidYouWork${index}`}>Onde já trabalhou?</InputLabel>
-                  <Input
-                    id={`whereDidYouWork${index}`}
-                    name={`whereDidYouWork[${index}]`}
-                    inputRef={register({ required: true })}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          disabled={whereDidYouWorkList.length === 1}
-                          aria-label="Remover informação de onde já trabalhou"
-                          onClick={handleRemoveNumberOfFieldsWhereYouWorked}
-                        >
-                          <Close />
-                        </IconButton>
-                        {whereDidYouWorkList.length - 1 === index && (
-                          <IconButton
-                            aria-label="Adicionar informação de onde já trabalhou"
-                            onClick={handleAddNumberOfFieldsWhereYouWorked}
-                          >
-                            <Add />
-                          </IconButton>
-                        )}
-                      </InputAdornment>
-                    }
+              <AddInformationFields
+                list={whereDidYouWorkList}
+                setList={setWhereDidYouWorkList}
+                name="whereDidYouWork"
+                text="Onde já trabalhou?"
+                formControlClass="main__form-control"
+                register={register}
                   />
-                </FormControl>
-              ))}
             </Card>
           </TabPanel>
           <TabPanel className="main__tab-panel" value={panelIndex} index={2} dir={theme.direction}>
