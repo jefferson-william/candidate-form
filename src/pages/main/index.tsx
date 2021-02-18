@@ -1,13 +1,15 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Button, Card, FormControl, Input, InputLabel, Tab, Tabs } from '@material-ui/core'
+import { Button, Card, FormControl, IconButton, Input, InputAdornment, InputLabel, Tab, Tabs } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
+import { Add, Close } from '@material-ui/icons'
 import Layout from '~/components/Layout'
 import TabPanel from '~/components/TabPanel'
 import { Main } from '~/pages/main/styles'
 import { DataProps } from '~/types/data'
 
 const Component: React.FC = () => {
+  const [whereDidYouWorkList, setWhereDidYouWorkList] = useState<number[]>([0])
   const [data, setData] = useState<Partial<DataProps>>({})
   const [panelIndex, setPanelIndex] = useState<number>(0)
   const theme = useTheme()
@@ -28,6 +30,17 @@ const Component: React.FC = () => {
   const handleChange = useCallback((event: React.ChangeEvent<{}>, newValue: number) => setPanelIndex(newValue), [])
 
   const handleBack = useCallback(() => setPanelIndex(panelIndex - 1), [panelIndex])
+
+  const handleAddNumberOfFieldsWhereYouWorked = useCallback(
+    () => setWhereDidYouWorkList([...whereDidYouWorkList, whereDidYouWorkList.length]),
+    [whereDidYouWorkList]
+  )
+
+  const handleRemoveNumberOfFieldsWhereYouWorked = useCallback(() => {
+    whereDidYouWorkList.pop()
+
+    setWhereDidYouWorkList([...whereDidYouWorkList])
+  }, [whereDidYouWorkList])
 
   const onSubmit = useCallback(
     (values: Partial<DataProps>) => {
@@ -64,7 +77,37 @@ const Component: React.FC = () => {
             </Card>
           </TabPanel>
           <TabPanel className="main__tab-panel" value={panelIndex} index={1} dir={theme.direction}>
-            <Card className="main__card">Onde já trabalhou</Card>
+            <Card className="main__card">
+              {whereDidYouWorkList.map((index) => (
+                <FormControl key={index} className="main__form-control" required>
+                  <InputLabel htmlFor={`whereDidYouWork${index}`}>Onde já trabalhou?</InputLabel>
+                  <Input
+                    id={`whereDidYouWork${index}`}
+                    name={`whereDidYouWork[${index}]`}
+                    inputRef={register({ required: true })}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          disabled={whereDidYouWorkList.length === 1}
+                          aria-label="Remover informação de onde já trabalhou"
+                          onClick={handleRemoveNumberOfFieldsWhereYouWorked}
+                        >
+                          <Close />
+                        </IconButton>
+                        {whereDidYouWorkList.length - 1 === index && (
+                          <IconButton
+                            aria-label="Adicionar informação de onde já trabalhou"
+                            onClick={handleAddNumberOfFieldsWhereYouWorked}
+                          >
+                            <Add />
+                          </IconButton>
+                        )}
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              ))}
+            </Card>
           </TabPanel>
           <TabPanel className="main__tab-panel" value={panelIndex} index={2} dir={theme.direction}>
             <Card className="main__card">Conhecimentos</Card>
