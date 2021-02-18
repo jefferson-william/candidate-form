@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import SwipeableViews from 'react-swipeable-views'
 import { Button, Card, FormControl, Input, InputLabel, Tab, Tabs } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
 import Layout from '~/components/Layout'
@@ -28,8 +27,6 @@ const Component: React.FC = () => {
 
   const handleChange = useCallback((event: React.ChangeEvent<{}>, newValue: number) => setPanelIndex(newValue), [])
 
-  const handleChangeIndex = useCallback((newValue: number) => setPanelIndex(newValue), [])
-
   const handleBack = useCallback(() => setPanelIndex(panelIndex - 1), [panelIndex])
 
   const onSubmit = useCallback(
@@ -54,30 +51,24 @@ const Component: React.FC = () => {
           <Tab label="Conhecimentos" {...a11yProps(2)} />
         </Tabs>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <SwipeableViews
-            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-            index={panelIndex}
-            onChangeIndex={handleChangeIndex}
-          >
-            <TabPanel className="main__tab-panel" value={panelIndex} index={0} dir={theme.direction}>
-              <Card className="main__card">
-                <FormControl className="main__form-control" required>
-                  <InputLabel htmlFor="name">Nome completo</InputLabel>
-                  <Input autoFocus id="name" name="name" inputRef={register({ required: true })} />
-                </FormControl>
-                <FormControl className="main__form-control" required>
-                  <InputLabel htmlFor="email">E-mail</InputLabel>
-                  <Input type="email" id="email" name="email" inputRef={register({ required: true })} />
-                </FormControl>
-              </Card>
-            </TabPanel>
-            <TabPanel className="main__tab-panel" value={panelIndex} index={1} dir={theme.direction}>
-              <Card className="main__card">Onde já trabalhou</Card>
-            </TabPanel>
-            <TabPanel className="main__tab-panel" value={panelIndex} index={2} dir={theme.direction}>
-              <Card className="main__card">Conhecimentos</Card>
-            </TabPanel>
-          </SwipeableViews>
+          <TabPanel className="main__tab-panel" value={panelIndex} index={0} dir={theme.direction}>
+            <Card className="main__card">
+              <FormControl className="main__form-control" required>
+                <InputLabel htmlFor="name">Nome completo</InputLabel>
+                <Input autoFocus id="name" name="name" inputRef={register({ required: true })} />
+              </FormControl>
+              <FormControl className="main__form-control" required>
+                <InputLabel htmlFor="email">E-mail</InputLabel>
+                <Input type="email" id="email" name="email" inputRef={register({ required: true })} />
+              </FormControl>
+            </Card>
+          </TabPanel>
+          <TabPanel className="main__tab-panel" value={panelIndex} index={1} dir={theme.direction}>
+            <Card className="main__card">Onde já trabalhou</Card>
+          </TabPanel>
+          <TabPanel className="main__tab-panel" value={panelIndex} index={2} dir={theme.direction}>
+            <Card className="main__card">Conhecimentos</Card>
+          </TabPanel>
           <div className="main__actions">
             <Button className="main__button" variant="contained" disabled={firstPanel} onClick={handleBack}>
               Anterior
