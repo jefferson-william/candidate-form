@@ -9,6 +9,7 @@ import { Main } from '~/pages/main/styles'
 import { DataProps } from '~/types/data'
 
 const Component: React.FC = () => {
+  const [knowledgeList, setKnowledgeList] = useState<number[]>([0])
   const [whereDidYouWorkList, setWhereDidYouWorkList] = useState<number[]>([0])
   const [data, setData] = useState<Partial<DataProps>>({})
   const [panelIndex, setPanelIndex] = useState<number>(0)
@@ -74,11 +75,20 @@ const Component: React.FC = () => {
                 text="Onde já trabalhou?"
                 formControlClass="main__form-control"
                 register={register}
-                  />
+              />
             </Card>
           </TabPanel>
           <TabPanel className="main__tab-panel" value={panelIndex} index={2} dir={theme.direction}>
-            <Card className="main__card">Conhecimentos</Card>
+            <Card className="main__card">
+              <AddInformationFields
+                list={knowledgeList}
+                setList={setKnowledgeList}
+                name="knowledge"
+                text="Conhecimentos"
+                formControlClass="main__form-control"
+                register={register}
+              />
+            </Card>
           </TabPanel>
           <div className="main__actions">
             <Button className="main__button" variant="contained" disabled={firstPanel} onClick={handleBack}>
