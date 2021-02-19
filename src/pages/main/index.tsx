@@ -48,9 +48,23 @@ const Component: React.FC = () => {
     [lastPanel, panelIndex, data]
   )
 
-  const handleLinkedinSuccess = useCallback(() => {}, [])
+  const handleLinkedinSuccess = useCallback((...args: any) => {
+    const values = { ...args }
 
-  const handleLinkedinFailure = useCallback(() => {}, [])
+    // eslint-disable-next-line
+    console.log(0, values)
+
+    return values
+  }, [])
+
+  const handleLinkedinFailure = useCallback((...args: any) => {
+    const values = { ...args }
+
+    // eslint-disable-next-line
+    console.log(1, values)
+
+    return values
+  }, [])
 
   return (
     <Layout>
@@ -64,7 +78,7 @@ const Component: React.FC = () => {
           clientId={process.env.REACT_APP_LINKEDIN_CLIENT_ID}
           onFailure={handleLinkedinSuccess}
           onSuccess={handleLinkedinFailure}
-          redirectUri="https://candidate-form.herokuapp.com"
+          redirectUri={process.env.REACT_APP_URL}
         >
           <img src={linkedinImage} alt="Log in with Linked In" style={{ maxWidth: '180px' }} />
         </LinkedIn>
