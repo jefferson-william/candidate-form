@@ -103,7 +103,7 @@ const Component: React.FC = () => {
             onSuccess={handleLinkedinSuccess}
             onFailure={handleLinkedinFailure}
             redirectUri={`${process.env.REACT_APP_URL}/linkedin`}
-            scope="r_liteprofile r_emailaddress"
+            scope={process.env.REACT_APP_LINKEDIN_CLIENT_SCOPE}
           >
             <img src={linkedinImage} alt="Log in with Linked In" style={{ maxWidth: '180px' }} />
           </LinkedIn>
