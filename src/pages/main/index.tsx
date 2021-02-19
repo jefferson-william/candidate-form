@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 // eslint-disable-next-line
 import { LinkedIn } from 'react-linkedin-login-oauth2'
@@ -85,6 +85,19 @@ const Component: React.FC = () => {
   )
 
   const handleLinkedinFailure = useCallback(() => setLinkedinAuthorizationToken(''), [])
+
+  useEffect(() => {
+    // eslint-disable-next-line
+    console.log(0, process.env)
+    // eslint-disable-next-line
+    console.log(1, process.env.REACT_APP_LINKEDIN_CLIENT_ID)
+    // eslint-disable-next-line
+    console.log(2, process.env.REACT_APP_LINKEDIN_CLIENT_SCOPE)
+    // eslint-disable-next-line
+    console.log(3, process.env.REACT_APP_LINKEDIN_API_ACCESS_TOKEN)
+    // eslint-disable-next-line
+    console.log(4, process.env.REACT_APP_LINKEDIN_CLIENT_SECRET)
+  }, [])
 
   return (
     <Layout>
