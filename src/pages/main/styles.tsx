@@ -27,5 +27,14 @@ export const Main = styled(Container)`
     &__button:not(:first-child) {
       margin-left: 16px;
     }
+    &__linkedin-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 48px;
+    }
+    &__linkedin-text {
+      margin-bottom: 16px;
+    }
   }
 `

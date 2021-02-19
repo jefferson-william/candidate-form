@@ -3,15 +3,17 @@ import { useForm } from 'react-hook-form'
 // eslint-disable-next-line
 import { LinkedIn } from 'react-linkedin-login-oauth2'
 import linkedinImage from 'react-linkedin-login-oauth2/assets/linkedin.png'
-import { Button, Card, FormControl, Input, InputLabel, Tab, Tabs } from '@material-ui/core'
+import { Button, Card, FormControl, Input, InputLabel, Tab, Tabs, Typography } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
 import AddInformationFields from '~/components/AddInformationFields'
 import Layout from '~/components/Layout'
 import TabPanel from '~/components/TabPanel'
 import { Main } from '~/pages/main/styles'
 import { DataProps } from '~/types/data'
+import { LinkedInSuccessProps } from '~/types/data/LinkedIn'
 
 const Component: React.FC = () => {
+  const [, setLinkedInCode] = useState<string>('')
   const [knowledgeList, setKnowledgeList] = useState<number[]>([0])
   const [whereDidYouWorkList, setWhereDidYouWorkList] = useState<number[]>([0])
   const [data, setData] = useState<Partial<DataProps>>({})
@@ -48,22 +50,8 @@ const Component: React.FC = () => {
     [lastPanel, panelIndex, data]
   )
 
-  const handleLinkedinSuccess = useCallback((...args: any) => {
-    const values = { ...args }
-
-    // eslint-disable-next-line
-    console.log(0, values)
-
-    return values
-  }, [])
-
-  const handleLinkedinFailure = useCallback((...args: any) => {
-    const values = { ...args }
-
-    // eslint-disable-next-line
-    console.log(1, values)
-
-    return values
+  const handleLinkedinSuccess = useCallback(({ code }: LinkedInSuccessProps) => {
+    setLinkedInCode(code)
   }, [])
 
   return (
@@ -74,14 +62,18 @@ const Component: React.FC = () => {
           <Tab label="Onde já trabalhou" {...a11yProps(1)} />
           <Tab label="Conhecimentos" {...a11yProps(2)} />
         </Tabs>
-        <LinkedIn
-          clientId={process.env.REACT_APP_LINKEDIN_CLIENT_ID}
-          onFailure={handleLinkedinSuccess}
-          onSuccess={handleLinkedinFailure}
-          redirectUri={process.env.REACT_APP_URL}
-        >
-          <img src={linkedinImage} alt="Log in with Linked In" style={{ maxWidth: '180px' }} />
-        </LinkedIn>
+        <div className="main__linkedin-area">
+          <Typography className="main__linkedin-text" variant="caption">
+            Click para preencher automaticamente
+          </Typography>
+          <LinkedIn
+            clientId={process.env.REACT_APP_LINKEDIN_CLIENT_ID}
+            onSuccess={handleLinkedinSuccess}
+            redirectUri={`${process.env.REACT_APP_URL}/linkedin`}
+          >
+            <img src={linkedinImage} alt="Log in with Linked In" style={{ maxWidth: '180px' }} />
+          </LinkedIn>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TabPanel className="main__tab-panel" value={panelIndex} index={0} dir={theme.direction}>
             <Card className="main__card">
