@@ -5,15 +5,17 @@ import { LinkedIn } from 'react-linkedin-login-oauth2'
 import linkedinImage from 'react-linkedin-login-oauth2/assets/linkedin.png'
 import { Button, Card, FormControl, Input, InputLabel, Tab, Tabs, Typography } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
+import axios from 'axios'
 import AddInformationFields from '~/components/AddInformationFields'
 import Layout from '~/components/Layout'
 import TabPanel from '~/components/TabPanel'
 import { Main } from '~/pages/main/styles'
 import { DataProps } from '~/types/data'
-import { LinkedInSuccessProps } from '~/types/data/LinkedIn'
+import { LinkedinSuccessAccessTokenProps, LinkedinSuccessAuthorizationTokenProps } from '~/types/data/LinkedIn'
 
 const Component: React.FC = () => {
-  const [, setLinkedInCode] = useState<string>('')
+  const [linkedinAuthorizationToken, setLinkedinAuthorizationToken] = useState<string>('')
+  const [linkedinAccessToken, setLinkedinAccessToken] = useState<string>('')
   const [knowledgeList, setKnowledgeList] = useState<number[]>([0])
   const [whereDidYouWorkList, setWhereDidYouWorkList] = useState<number[]>([0])
   const [data, setData] = useState<Partial<DataProps>>({})
@@ -50,9 +52,39 @@ const Component: React.FC = () => {
     [lastPanel, panelIndex, data]
   )
 
-  const handleLinkedinSuccess = useCallback(({ code }: LinkedInSuccessProps) => {
-    setLinkedInCode(code)
-  }, [])
+  const handleLinkedinSuccess = useCallback(
+    async ({ code }: LinkedinSuccessAuthorizationTokenProps) => {
+      setLinkedinAuthorizationToken(code)
+
+      const responseAuthorizationToken = await axios.post<LinkedinSuccessAccessTokenProps>(
+        process.env.REACT_APP_LINKEDIN_API_ACCESS_TOKEN as string,
+        {
+          code,
+          grant_type: 'authorization_code',
+          redirect_uri: `${process.env.REACT_APP_URL}/linkedin`,
+          client_id: process.env.REACT_APP_LINKEDIN_CLIENT_ID,
+          client_secret: process.env.REACT_APP_LINKEDIN_CLIENT_SECRET,
+        }
+      )
+
+      setLinkedinAccessToken(code)
+
+      const responseAccessToken = await axios.get(process.env.REACT_APP_LINKEDIN_API_ME as string, {
+        headers: { Authorization: `Bearer ${code}` },
+      })
+
+      const values = {
+        responseAuthorizationToken,
+        responseAccessToken,
+      }
+
+      // eslint-disable-next-line
+      console.log(0, values)
+    },
+    [linkedinAuthorizationToken, linkedinAccessToken]
+  )
+
+  const handleLinkedinFailure = useCallback(() => setLinkedinAuthorizationToken(''), [])
 
   return (
     <Layout>
@@ -69,7 +101,9 @@ const Component: React.FC = () => {
           <LinkedIn
             clientId={process.env.REACT_APP_LINKEDIN_CLIENT_ID}
             onSuccess={handleLinkedinSuccess}
+            onFailure={handleLinkedinFailure}
             redirectUri={`${process.env.REACT_APP_URL}/linkedin`}
+            scope="r_liteprofile r_emailaddress"
           >
             <img src={linkedinImage} alt="Log in with Linked In" style={{ maxWidth: '180px' }} />
           </LinkedIn>

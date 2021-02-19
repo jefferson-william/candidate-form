@@ -36,7 +36,7 @@ module.exports = {
         functions: 'ignore',
       },
     ],
-    camelcase: ['error', { properties: 'always' }],
+    camelcase: 'off',
     'no-use-before-define': 'off',
     'no-case-declarations': 'off',
     'no-param-reassign': ['error', { props: true, ignorePropertyModificationsFor: ['draft'] }],
